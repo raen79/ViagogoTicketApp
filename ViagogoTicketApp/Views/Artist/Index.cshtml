@@ -1,0 +1,42 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "The Weeknd's Events";
+}
+
+<h2>@ViewBag.Title</h2>
+<form method="GET" action="">
+    Starting After: <input type="date" name="minDate" value="@string.Format("{0:yyyy-MM-dd}", ViewBag.MinDate)" /> &nbsp;&nbsp;
+    Ending Before: <input type="date" name="maxDate" value="@string.Format("{0:yyyy-MM-dd}", ViewBag.MaxDate)" /> 
+    <input type="submit" />
+</form>
+<ul style="list-style: none;">
+@foreach (var Event in ViewBag.Events)
+    {
+        if (Event != null)
+        {
+            <li><h4>@Html.ActionLink((string)Event["Name"] + " - " + (string)@Event["Venue"], "Listing", "Event", new { @id = (int)Event["ID"] }, null) | <span style="font-size: 14px; font-style: italic;">@Event["Date"].ToString("MMMM dd yyyy")</span></h4>
+                <ul>
+                    @if (Event.ContainsKey("IsCheapestInCountry")){
+                        <li><font color="red"><b>This event is the cheapest in @Event["Country"] for this artist!</b></font></li>
+                    }
+                    <li>City: @Event["City"], @Event["Country"]</li>
+                    <li>Minimum Ticket Price: @Event["MinPriceDisplay"]</li>
+                </ul>
+            </li><br />
+        }
+    }
+</ul>
+
+@if(ViewBag.MaxDate is string)
+{
+    ViewBag.MaxDate = null;
+}
+
+@Html.Partial("_Pagination", new ViewDataDictionary { { "id", 0 },
+                                                        { "Method", "Index" },
+                                                        { "Controller", "Artist"},
+                                                        { "Page", ViewBag.Page },
+                                                        { "Pages", ViewBag.Pages },
+                                                        { "noOfTickets", 0 },
+                                                        { "startDate", (DateTime?)ViewBag.minDate },
+                                                        { "endDate", (DateTime?)ViewBag.maxDate } })

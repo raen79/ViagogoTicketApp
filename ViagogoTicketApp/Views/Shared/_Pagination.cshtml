@@ -1,0 +1,27 @@
+﻿@if ((int)ViewData["Page"] != 1)
+{
+    <span>@Html.ActionLink("Previous", (string)ViewData["Method"], (string)ViewData["Controller"], new { @id = (int)ViewData["id"], @page = ((int)ViewData["Page"] - 1), @noOfTickets = (int)ViewData["noOfTickets"], @minDate = (DateTime?)ViewData["startDate"], @maxDate = (DateTime?)ViewData["endDate"] }, null)</span>
+}
+else
+{
+    <span>Previous</span>
+}
+@for (int i = 1; i <= (int)ViewData["Pages"]; i++)
+{
+    if (i == (int)(int)ViewData["Page"])
+    {
+        <span>@i</span>
+    }
+    else
+    {
+        <span>@Html.ActionLink(i.ToString(), (string)ViewData["Method"], (string)ViewData["Controller"], new { @id = (int)ViewData["id"], @page = i, @noOfTickets = (int)ViewData["noOfTickets"], @minDate = (DateTime?)ViewData["startDate"], @maxDate = (DateTime?)ViewData["endDate"] }, null)</span>
+    }
+}
+@if ((int)ViewData["Page"] < (int)ViewData["Pages"])
+{
+    <span>@Html.ActionLink("Next", (string)ViewData["Method"], (string)ViewData["Controller"], new { @id = (int)ViewData["id"], @page = ((int)ViewData["Page"] + 1), @noOfTickets = (int)ViewData["noOfTickets"], @minDate = (DateTime?)ViewData["startDate"], @maxDate = (DateTime?)ViewData["endDate"] }, null)</span>
+}
+else
+{
+    <span>Next</span>
+}

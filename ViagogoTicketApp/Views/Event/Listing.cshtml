@@ -1,0 +1,70 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = ViewBag.EventName + " Ticket Listings";
+}
+
+<h2>@ViewBag.EventName Ticket Listings</h2>
+
+<form method="GET" action="">
+    Amount of Tickets per Listing: 
+    <select name="noOfTickets">
+        @for (int i = 0; i < 101; i++)
+        {
+            if (i == 0)
+            {
+                if (ViewBag.NoOfTickets == i)
+                {
+                    <option value="@i" selected>Any</option>
+                }
+                else
+                {
+                    <option value="@i">Any</option>
+                }
+            }
+            else
+            {
+                if (ViewBag.NoOfTickets == i)
+                {
+                    <option value="@i" selected>@i</option>
+                }
+                else
+                {
+                    <option value="@i">@i</option>
+                }
+            }
+        }
+    </select>&nbsp;&nbsp;
+    <input type="submit" />
+</form>
+
+<table class="table" style="width:100%">
+    <tr>
+        <th>Section</th>
+        <th>Tickets Left</th>
+        <th>Price</th>
+    </tr>
+    @foreach (var listing in ViewBag.Listings)
+    {
+        <tr>
+            @if (@listing.Seating.Row == "")
+            {
+                <td>@listing.Seating.Section</td>
+            }
+            else{ 
+                <td>@listing.Seating.Section | Row @listing.Seating.Row</td>
+            }
+            <td>@listing.NumberOfTickets tickets left</td>
+            <td>@listing.TicketPrice.Display</td>
+        </tr>
+        
+    }
+</table>
+
+@Html.Partial("_Pagination", new ViewDataDictionary { { "id", ViewBag.ID },
+                                                        { "Method", "Listing" },
+                                                        { "Controller", "Event"},
+                                                        { "Page", ViewBag.Page },
+                                                        { "Pages", ViewBag.Pages },
+                                                        { "noOfTickets", ViewBag.NoOfTickets },
+                                                        { "startDate", null },
+                                                        { "endDate", null } })
